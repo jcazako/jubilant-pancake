@@ -21,8 +21,8 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
     - Configure AWS provider with region variable
     - _Requirements: 2.4_
 
-- [ ] 2. Implement networking module
-  - [ ] 2.1 Create VPC and subnet configuration
+- [-] 2. Implement networking module
+  - [x] 2.1 Create VPC and subnet configuration
     - Create VPC with DNS support
     - Create public subnets across multiple AZs for ALB
     - Create private subnets across multiple AZs for GPU instances
