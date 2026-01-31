@@ -16,7 +16,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
     - Create `backend.tf` with S3 backend configuration
     - Configure DynamoDB table for state locking
     - _Requirements: 2.5_
-  - [ ] 1.3 Define root variables and provider configuration
+  - [x] 1.3 Define root variables and provider configuration
     - Define all input variables with validation rules
     - Configure AWS provider with region variable
     - _Requirements: 2.4_
