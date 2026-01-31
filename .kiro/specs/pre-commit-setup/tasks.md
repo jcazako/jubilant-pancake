@@ -17,15 +17,15 @@ This plan implements pre-commit hooks for the LLM inference service project. Tas
   - Configure to run on .tf and .tfvars files
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 3. Configure TFLint for OpenTofu linting
-  - [ ] 3.1 Create `.tflint.hcl` configuration file
+- [x] 3. Configure TFLint for OpenTofu linting
+  - [x] 3.1 Create `.tflint.hcl` configuration file
     - Enable AWS plugin for AWS-specific rules
     - Enable naming convention rules
     - Enable deprecated syntax detection
     - Enable unused declarations detection
     - _Requirements: 3.2, 3.3_
 
-  - [ ] 3.2 Add terraform_tflint hook to pre-commit config
+  - [x] 3.2 Add terraform_tflint hook to pre-commit config
     - Reference the .tflint.hcl configuration
     - _Requirements: 3.1, 3.4_
 
