@@ -13,13 +13,13 @@ flowchart TB
     subgraph Internet
         Client[Client Applications]
     end
-    
+
     subgraph AWS["AWS Cloud"]
         subgraph Public["Public Subnets"]
             APIGW[API Gateway]
             ALB[Application Load Balancer]
         end
-        
+
         subgraph Private["Private Subnets"]
             subgraph ASG["Auto Scaling Group"]
                 EC2_1[GPU Instance 1<br/>vLLM + Phi-3 mini]
@@ -27,19 +27,19 @@ flowchart TB
                 EC2_N[GPU Instance N<br/>vLLM + Phi-3 mini]
             end
         end
-        
+
         subgraph Monitoring["Monitoring"]
             CW[CloudWatch]
             CWAlarms[CloudWatch Alarms]
             CWDash[CloudWatch Dashboard]
         end
-        
+
         subgraph Storage["State Storage"]
             S3[S3 Bucket<br/>OpenTofu State]
             DDB[DynamoDB<br/>State Lock]
         end
     end
-    
+
     Client -->|HTTPS| APIGW
     APIGW -->|Rate Limited| ALB
     ALB --> EC2_1
@@ -730,38 +730,38 @@ jobs:
       id-token: write
       contents: read
       pull-requests: write
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
-      
+
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
         with:
           tofu_version: ${{ env.TOFU_VERSION }}
-      
+
       - name: Format Check
         run: tofu fmt -check -recursive
         working-directory: infrastructure
-      
+
       - name: Initialize
         run: tofu init -backend=false
         working-directory: infrastructure
-      
+
       - name: Validate
         run: tofu validate
         working-directory: infrastructure
-      
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.21'
-      
+
       - name: Run Tests
         run: go test -v ./...
         working-directory: tests
@@ -773,42 +773,42 @@ jobs:
       id-token: write
       contents: read
       pull-requests: write
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
-      
+
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
         with:
           tofu_version: ${{ env.TOFU_VERSION }}
-      
+
       - name: Initialize
         run: tofu init
         working-directory: infrastructure
-      
+
       - name: Plan
         id: plan
         run: tofu plan -var-file=environments/dev.tfvars -no-color -out=tfplan
         working-directory: infrastructure
-      
+
       - name: Setup Infracost
         uses: infracost/actions/setup@v3
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
-      
+
       - name: Generate Infracost Cost Estimate
         run: |
           infracost breakdown --path=. \
             --format=json \
             --out-file=/tmp/infracost.json
         working-directory: infrastructure
-      
+
       - name: Post Infracost Comment
         run: |
           infracost comment github --path=/tmp/infracost.json \
@@ -816,7 +816,7 @@ jobs:
             --github-token=${{ secrets.GITHUB_TOKEN }} \
             --pull-request=${{ github.event.pull_request.number }} \
             --behavior=update
-      
+
       - name: Comment Plan on PR
         uses: actions/github-script@v7
         with:
@@ -869,31 +869,31 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
-      
+
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
         with:
           tofu_version: ${{ env.TOFU_VERSION }}
-      
+
       - name: Initialize
         run: tofu init
         working-directory: infrastructure
-      
+
       - name: Apply
         run: |
           tofu apply -auto-approve \
             -var-file=environments/${{ github.event.inputs.environment || 'dev' }}.tfvars
         working-directory: infrastructure
-      
+
       - name: Output API Endpoint
         run: tofu output api_endpoint
         working-directory: infrastructure
@@ -925,19 +925,19 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.inputs.confirm == github.event.inputs.environment
     environment: ${{ github.event.inputs.environment }}
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
-      
+
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
-      
+
       - name: Destroy
         run: |
           tofu init
@@ -967,7 +967,7 @@ resource "aws_iam_openid_connect_provider" "github" {
 
 resource "aws_iam_role" "github_actions" {
   name = "github-actions-llm-inference"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{

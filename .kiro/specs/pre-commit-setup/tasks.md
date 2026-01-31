@@ -34,13 +34,13 @@ This plan implements pre-commit hooks for the LLM inference service project. Tas
   - Configure to detect security misconfigurations
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [-] 5. Create setup documentation
+- [x] 5. Create setup documentation
   - Add README section or CONTRIBUTING.md with setup instructions
   - Document required tool installations (pre-commit, terraform, tflint, tfsec)
   - Include `pre-commit install` command
   - _Requirements: 1.2, 1.3_
 
-- [ ] 6. Checkpoint - Verify hooks work correctly
+- [-] 6. Checkpoint - Verify hooks work correctly
   - Run `pre-commit install` to register hooks
   - Run `pre-commit run --all-files` to test all hooks
   - Verify hooks catch formatting issues, linting errors, and security problems

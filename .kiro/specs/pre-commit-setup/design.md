@@ -11,7 +11,7 @@ flowchart TD
     subgraph "Developer Workflow"
         A[git commit] --> B[pre-commit hooks triggered]
     end
-    
+
     subgraph "Pre-Commit Framework"
         B --> C{Run hooks on staged files}
         C --> D[General Checks]
@@ -19,7 +19,7 @@ flowchart TD
         C --> F[OpenTofu Linting]
         C --> G[Security Scanning]
     end
-    
+
     subgraph "Hook Results"
         D --> H{All passed?}
         E --> H
