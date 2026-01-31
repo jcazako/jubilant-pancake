@@ -33,7 +33,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
     - Create ALB security group allowing HTTPS (443) from internet
     - Create EC2 security group allowing traffic only from ALB
     - _Requirements: 6.4, 6.5_
-  - [ ] 2.3 Write property test for multi-AZ distribution
+  - [x] 2.3 Write property test for multi-AZ distribution
     - **Property 4: Multi-AZ Distribution**
     - **Validates: Requirements 6.1**
   - [ ] 2.4 Write property test for security group least privilege
@@ -188,9 +188,9 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
     - _Requirements: 2.3_
 
 - [ ] 14. Set up testing infrastructure
-  - [ ] 14.1 Create Go test module
-    - Create `tests/go.mod` with Terratest dependencies
-    - Create generator functions for property tests
+  - [ ] 14.1 Create tofu test configuration
+    - Create `infrastructure/tests/` directory structure
+    - Create mock provider configuration for tests
     - _Requirements: 2.1_
   - [ ] 14.2 Create unit tests
     - Test OpenTofu validation
@@ -200,7 +200,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
 - [ ] 15. Final checkpoint - Complete validation
   - Run `tofu fmt -check -recursive`
   - Run `tofu validate`
-  - Run all property and unit tests
+  - Run `tofu test`
   - Ensure all tests pass, ask the user if questions arise
 
 ## Notes

@@ -628,49 +628,54 @@ This infrastructure project requires both unit tests and property-based tests:
 - **Unit tests**: Verify specific OpenTofu configurations produce expected resource attributes
 - **Property tests**: Verify universal properties hold across all valid variable combinations
 
-### Property-Based Testing Configuration
+### Testing Framework
 
-**Framework**: [Terratest](https://terratest.gruntwork.io/) with Go for infrastructure testing, combined with [rapid](https://github.com/flyingmutant/rapid) for property-based test generation.
+**Framework**: OpenTofu native testing with `tofu test` command.
+
+OpenTofu's built-in testing framework allows writing tests in HCL that validate infrastructure configurations without deploying real resources. Tests use mock providers to simulate AWS responses.
 
 **Configuration**:
-- Minimum 100 iterations per property test
-- Each test tagged with: **Feature: llm-inference-service, Property {number}: {property_text}**
+- Tests located in `infrastructure/tests/` directory
+- Test files use `.tftest.hcl` extension
+- Each test tagged with comments: `# Feature: llm-inference-service, Property {number}: {property_text}`
 
 ### Test Categories
 
 #### 1. OpenTofu Validation Tests (Unit)
 
-```go
-// Verify OpenTofu configuration is syntactically valid
-func TestTerraformValidate(t *testing.T) {
-    terraformOptions := &terraform.Options{
-        TerraformDir: "../infrastructure",
-    }
-    terraform.Validate(t, terraformOptions)
+```hcl
+# networking_unit.tftest.hcl
+# Verify networking module creates expected resources
+
+run "verify_vpc_dns_enabled" {
+  command = plan
+
+  variables {
+    environment        = "dev"
+    availability_zones = ["us-east-1a", "us-east-1b"]
+    certificate_arn    = "arn:aws:acm:us-east-1:123456789012:certificate/test"
+  }
+
+  assert {
+    condition     = aws_vpc.main.enable_dns_support == true
+    error_message = "VPC must have DNS support enabled"
+  }
+
+  assert {
+    condition     = aws_vpc.main.enable_dns_hostnames == true
+    error_message = "VPC must have DNS hostnames enabled"
+  }
 }
 ```
 
-#### 2. Plan Output Tests (Unit)
+#### 2. Property Tests
 
-```go
-// Verify plan includes expected resources
-func TestPlanContainsRequiredResources(t *testing.T) {
-    // Verify VPC, subnets, ASG, ALB, API Gateway exist in plan
-}
-```
+Each correctness property will be implemented as a `tofu test`:
 
-#### 3. Property Tests
+- **Property 4**: Verify subnets are distributed across all provided AZs
+- **Property 5**: Verify security group ingress from 0.0.0.0/0 only allows port 443
 
-Each correctness property will be implemented as a property-based test:
-
-- **Property 1**: Generate random valid variable combinations, verify all resource types present
-- **Property 2**: Generate random environment names, verify all resources tagged correctly
-- **Property 3**: Generate random min/max instance values, verify ASG min_size >= 1
-- **Property 4**: Generate random AZ lists, verify subnet distribution
-- **Property 5**: Parse security group rules, verify ingress restrictions
-- **Property 6**: Parse dashboard JSON, verify all metrics present
-
-#### 4. Integration Tests (Manual/CI)
+#### 3. Integration Tests (Manual/CI)
 
 - Deploy to test environment
 - Verify API endpoint responds
@@ -681,14 +686,27 @@ Each correctness property will be implemented as a property-based test:
 ### Test File Structure
 
 ```
-tests/
-├── go.mod
-├── go.sum
-├── terraform_test.go           # Unit tests
-├── properties_test.go          # Property-based tests
-├── integration_test.go         # Integration tests (optional)
-└── generators/
-    └── generators.go           # Random input generators
+infrastructure/
+├── tests/
+│   ├── networking.tftest.hcl      # Networking module tests
+│   ├── compute.tftest.hcl         # Compute module tests
+│   ├── security.tftest.hcl        # Security property tests
+│   └── setup/
+│       └── main.tf                # Test helper module
+├── modules/
+│   └── ...
+└── main.tf
+```
+
+### Mock Provider Configuration
+
+Tests use mock providers to avoid real AWS API calls:
+
+```hcl
+# In test files
+mock_provider "aws" {
+  alias = "mock"
+}
 ```
 
 ### CI/CD Integration with GitHub Actions
@@ -757,14 +775,9 @@ jobs:
         run: tofu validate
         working-directory: infrastructure
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-
       - name: Run Tests
-        run: go test -v ./...
-        working-directory: tests
+        run: tofu test
+        working-directory: infrastructure
 
   plan:
     runs-on: ubuntu-latest
