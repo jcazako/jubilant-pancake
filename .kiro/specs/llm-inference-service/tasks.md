@@ -21,7 +21,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
     - Configure AWS provider with region variable
     - _Requirements: 2.4_
 
-- [-] 2. Implement networking module
+- [x] 2. Implement networking module
   - [x] 2.1 Create VPC and subnet configuration
     - Create VPC with DNS support
     - Create public subnets across multiple AZs for ALB
@@ -36,7 +36,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
   - [x] 2.3 Write property test for multi-AZ distribution
     - **Property 4: Multi-AZ Distribution**
     - **Validates: Requirements 6.1**
-  - [ ] 2.4 Write property test for security group least privilege
+  - [x] 2.4 Write property test for security group least privilege
     - **Property 5: Security Group Least Privilege**
     - **Validates: Requirements 6.4**
 
