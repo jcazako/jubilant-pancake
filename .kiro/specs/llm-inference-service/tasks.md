@@ -12,7 +12,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
     - Create module directories: `networking/`, `compute/`, `load_balancer/`, `api_gateway/`, `monitoring/`
     - Create `environments/` with `dev.tfvars` and `prod.tfvars`
     - _Requirements: 2.1, 2.2_
-  - [ ] 1.2 Configure OpenTofu backend for remote state
+  - [x] 1.2 Configure OpenTofu backend for remote state
     - Create `backend.tf` with S3 backend configuration
     - Configure DynamoDB table for state locking
     - _Requirements: 2.5_

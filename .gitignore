@@ -1,0 +1,14 @@
+# OpenTofu/Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
