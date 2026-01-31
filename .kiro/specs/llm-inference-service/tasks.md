@@ -44,23 +44,23 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
   - Ensure `tofu validate` passes for networking module
   - Ensure all tests pass, ask the user if questions arise
 
-- [ ] 4. Implement compute module
-  - [ ] 4.1 Create launch template for GPU instances
+- [x] 4. Implement compute module
+  - [x] 4.1 Create launch template for GPU instances
     - Configure g5.xlarge instance type with Deep Learning AMI
     - Create user data script to install vLLM and start Phi-3 mini
     - Configure 100GB gp3 root volume
     - _Requirements: 1.1, 1.2, 1.3_
-  - [ ] 4.2 Create Auto Scaling Group with scaling policies
+  - [x] 4.2 Create Auto Scaling Group with scaling policies
     - Configure ASG with min/max instance variables
     - Create scale-up policy for GPU utilization > 70%
     - Create scale-down policy for GPU utilization < 30%
     - Configure target group attachment
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
-  - [ ] 4.3 Create IAM role and instance profile
+  - [x] 4.3 Create IAM role and instance profile
     - Create IAM role with CloudWatch and ECR permissions
     - Attach instance profile to launch template
     - _Requirements: 1.4_
-  - [ ] 4.4 Write property test for minimum instance guarantee
+  - [x] 4.4 Write property test for minimum instance guarantee
     - **Property 3: Minimum Instance Guarantee**
     - **Validates: Requirements 3.3**
 
