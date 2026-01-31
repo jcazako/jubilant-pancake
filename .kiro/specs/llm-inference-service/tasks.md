@@ -40,7 +40,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
     - **Property 5: Security Group Least Privilege**
     - **Validates: Requirements 6.4**
 
-- [ ] 3. Checkpoint - Verify networking module
+- [x] 3. Checkpoint - Verify networking module
   - Ensure `tofu validate` passes for networking module
   - Ensure all tests pass, ask the user if questions arise
 
