@@ -118,3 +118,62 @@ resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
 }
+
+
+# Security Group for ALB
+resource "aws_security_group" "alb" {
+  name        = "${var.environment}-llm-inference-alb-sg"
+  description = "Security group for Application Load Balancer"
+  vpc_id      = aws_vpc.main.id
+
+  # Allow HTTPS from internet
+  ingress {
+    description = "HTTPS from internet"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow all outbound traffic
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(local.common_tags, {
+    Name = "${var.environment}-llm-inference-alb-sg"
+  })
+}
+
+# Security Group for EC2 GPU instances
+resource "aws_security_group" "ec2" {
+  name        = "${var.environment}-llm-inference-ec2-sg"
+  description = "Security group for GPU inference instances"
+  vpc_id      = aws_vpc.main.id
+
+  # Allow traffic from ALB on port 8000 (vLLM)
+  ingress {
+    description     = "vLLM traffic from ALB"
+    from_port       = 8000
+    to_port         = 8000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  # Allow all outbound traffic (for model downloads, updates, etc.)
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(local.common_tags, {
+    Name = "${var.environment}-llm-inference-ec2-sg"
+  })
+}

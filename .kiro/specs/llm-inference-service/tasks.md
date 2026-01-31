@@ -29,7 +29,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
     - Create Internet Gateway and NAT Gateway
     - Configure route tables
     - _Requirements: 6.1, 6.2, 6.3_
-  - [ ] 2.2 Create security groups
+  - [x] 2.2 Create security groups
     - Create ALB security group allowing HTTPS (443) from internet
     - Create EC2 security group allowing traffic only from ALB
     - _Requirements: 6.4, 6.5_
