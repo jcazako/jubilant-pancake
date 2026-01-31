@@ -29,7 +29,7 @@ This plan implements pre-commit hooks for the LLM inference service project. Tas
     - Reference the .tflint.hcl configuration
     - _Requirements: 3.1, 3.4_
 
-- [ ] 4. Add security scanning hook
+- [-] 4. Add security scanning hook
   - Add terraform_tfsec hook from pre-commit-terraform repository
   - Configure to detect security misconfigurations
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
