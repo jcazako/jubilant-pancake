@@ -7,7 +7,7 @@ This plan implements a Phi-3 mini LLM inference service on AWS using OpenTofu. T
 ## Tasks
 
 - [ ] 1. Set up project structure and OpenTofu configuration
-  - [ ] 1.1 Create directory structure for OpenTofu modules
+  - [-] 1.1 Create directory structure for OpenTofu modules
     - Create `infrastructure/` root with `main.tf`, `variables.tf`, `outputs.tf`, `versions.tf`
     - Create module directories: `networking/`, `compute/`, `load_balancer/`, `api_gateway/`, `monitoring/`
     - Create `environments/` with `dev.tfvars` and `prod.tfvars`

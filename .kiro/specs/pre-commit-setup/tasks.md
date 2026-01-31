@@ -12,7 +12,7 @@ This plan implements pre-commit hooks for the LLM inference service project. Tas
   - Configure large file threshold to 1000KB
   - _Requirements: 1.1, 5.1, 5.2, 5.3, 5.4, 5.5_
 
-- [-] 2. Add OpenTofu formatting hook
+- [x] 2. Add OpenTofu formatting hook
   - Add terraform_fmt hook from pre-commit-terraform repository
   - Configure to run on .tf and .tfvars files
   - _Requirements: 2.1, 2.2, 2.3_
